@@ -8,7 +8,6 @@ import YearSelector from './YearSelector';
 import MonthSelector from './MonthSelector';
 import DaySelector from './DaySelector';
 import TimeSelector from './TimeSelector';
-import { CALENDAR_HEIGHT } from '../enums';
 
 const CalendarView: Record<CalendarViews, ReactNode> = {
   year: <YearSelector />,

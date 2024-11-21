@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
 import { useCalendarContext } from '../CalendarContext';
 import dayjs from 'dayjs';
@@ -25,32 +25,40 @@ const Header = ({ buttonPrevIcon, buttonNextIcon }: HeaderProps) => {
     maximumDate,
   } = useCalendarContext();
 
-  var disabledPrevButton = dayjs(currentDate) >= dayjs(minimumDate)
+  var disabledPrevButton = dayjs(currentDate) >= dayjs(minimumDate);
 
-  if(dayjs().year() - dayjs(minimumDate).year() > 10 && calendarView === 'month'){
-    disabledPrevButton = dayjs().year() - 9 <= currentYear
+  if (
+    dayjs().year() - dayjs(minimumDate).year() > 10 &&
+    calendarView === 'month'
+  ) {
+    disabledPrevButton = dayjs().year() - 9 <= currentYear;
   }
 
   const currentMonthText = dayjs(currentDate).locale(locale).format('MMMM');
-  const displayPreviewNextButton = mode !== CalendarViews.year
+  const displayPreviewNextButton = mode !== CalendarViews.year;
   const renderPrevButton = (
     <Pressable
-      disabled={calendarView === CalendarViews.time ||
-      calendarView === CalendarViews.day ? dayjs(dayjs(selectedDate).format("YYYY MM")).isSame(dayjs(minimumDate).format("YYYY MM")) :
-        dayjs(dayjs(currentYear.toString()).format("YYYY")).isSame(dayjs(minimumDate).format("YYYY"))
+      disabled={
+        calendarView === CalendarViews.time ||
+        calendarView === CalendarViews.day
+          ? dayjs(dayjs(selectedDate).format('YYYY MM')).isSame(
+              dayjs(minimumDate).format('YYYY MM')
+            )
+          : dayjs(dayjs(currentYear.toString()).format('YYYY')).isSame(
+              dayjs(minimumDate).format('YYYY')
+            )
       }
       onPress={() => {
-        if(!disabledPrevButton){
-          return
+        if (!disabledPrevButton) {
+          return;
         }
         calendarView === CalendarViews.day
-          ? onChangeMonth(-1, parseInt(currentYear) -1)
+          ? onChangeMonth(-1, parseInt(String(currentYear), 10) - 1)
           : calendarView === CalendarViews.month
-            ? onChangeYear(currentYear - 1)
-            : calendarView === CalendarViews.year &&
-            onChangeYear(currentYear - YEAR_PAGE_SIZE)}
-
-      }
+          ? onChangeYear(currentYear - 1)
+          : calendarView === CalendarViews.year &&
+            onChangeYear(currentYear - YEAR_PAGE_SIZE);
+      }}
       testID="btn-prev"
       accessibilityRole="button"
       accessibilityLabel="Prev"
@@ -74,20 +82,22 @@ const Header = ({ buttonPrevIcon, buttonNextIcon }: HeaderProps) => {
 
   const renderNextButton = (
     <Pressable
-      disabled={calendarView === CalendarViews.time ||
-      calendarView === CalendarViews.day ?
-        dayjs(currentDate).isSame(dayjs(maximumDate))
-        : dayjs(dayjs((currentYear).toString()).format("YYYY")).isSame( dayjs(maximumDate).format("YYYY"))}
-      onPress={() =>{
+      disabled={
+        calendarView === CalendarViews.time ||
         calendarView === CalendarViews.day
-          ? onChangeMonth(1, currentYear -1)
+          ? dayjs(currentDate).isSame(dayjs(maximumDate))
+          : dayjs(dayjs(currentYear.toString()).format('YYYY')).isSame(
+              dayjs(maximumDate).format('YYYY')
+            )
+      }
+      onPress={() => {
+        calendarView === CalendarViews.day
+          ? onChangeMonth(1, currentYear - 1)
           : calendarView === CalendarViews.month
-            ? onChangeYear(currentYear + 1)
-            : calendarView === CalendarViews.year &&
-            onChangeYear(currentYear + YEAR_PAGE_SIZE)
-      }
-
-      }
+          ? onChangeYear(currentYear + 1)
+          : calendarView === CalendarViews.year &&
+            onChangeYear(currentYear + YEAR_PAGE_SIZE);
+      }}
       testID="btn-next"
       accessibilityRole="button"
       accessibilityLabel="Next"
@@ -124,24 +134,32 @@ const Header = ({ buttonPrevIcon, buttonNextIcon }: HeaderProps) => {
         testID="btn-year"
         accessibilityRole="button"
         accessibilityLabel={dayjs(currentDate).format('YYYY')}
-        disabled={calendarView === CalendarViews.year || calendarView === CalendarViews.month}
+        disabled={
+          calendarView === CalendarViews.year ||
+          calendarView === CalendarViews.month
+        }
       >
         <View style={[styles.textContainer, theme?.headerTextContainerStyle]}>
           <Text style={[styles.text, theme?.headerTextStyle]}>
             {calendarView === CalendarViews.year
               ? `${years.at(0)} - ${years.at(-1)}`
-              : calendarView === CalendarViews.day ? dayjs(currentDate).format('YYYY') : currentYear}
+              : calendarView === CalendarViews.day
+              ? dayjs(currentDate).format('YYYY')
+              : currentYear}
           </Text>
         </View>
       </Pressable>
     );
   }, [
-    calendarView,
-    currentDate,
     currentYear,
+    maximumDate,
+    minimumDate,
+    currentDate,
+    calendarView,
+    theme?.headerTextContainerStyle,
+    theme?.headerTextStyle,
     setCalendarView,
     onChangeYear,
-    theme,
   ]);
 
   const monthSelector = (
@@ -201,23 +219,23 @@ const Header = ({ buttonPrevIcon, buttonNextIcon }: HeaderProps) => {
     >
       {theme?.headerButtonsPosition === 'left' ? (
         <View style={styles.container}>
-          {displayPreviewNextButton &&
+          {displayPreviewNextButton && (
             <View style={styles.row}>
               {renderPrevButton}
               {renderNextButton}
             </View>
-          }
+          )}
           {renderSelectors}
         </View>
       ) : theme?.headerButtonsPosition === 'right' ? (
         <View style={styles.container}>
           {renderSelectors}
-          {displayPreviewNextButton &&
+          {displayPreviewNextButton && (
             <View style={styles.row}>
               {renderPrevButton}
               {renderNextButton}
             </View>
-          }
+          )}
         </View>
       ) : (
         <View style={styles.container}>

@@ -32,36 +32,36 @@ interface PropTypes extends CalendarTheme, HeaderProps {
 }
 
 const DateTimePicker = ({
-                          value,
-                          mode = 'datetime',
-                          locale = 'en',
-                          minimumDate = null,
-                          maximumDate = null,
-                          firstDayOfWeek = 0,
-                          onValueChange = () => {},
-                          displayFullDays = false,
-                          headerButtonsPosition = 'around',
-                          headerContainerStyle,
-                          headerTextContainerStyle,
-                          headerTextStyle,
-                          headerButtonStyle,
-                          headerButtonColor,
-                          headerButtonSize,
-                          dayContainerStyle,
-                          todayContainerStyle,
-                          todayTextStyle,
-                          monthContainerStyle,
-                          yearContainerStyle,
-                          weekDaysContainerStyle,
-                          weekDaysTextStyle,
-                          calendarTextStyle,
-                          selectedTextStyle,
-                          selectedItemColor,
-                          timePickerContainerStyle,
-                          timePickerTextStyle,
-                          buttonPrevIcon,
-                          buttonNextIcon,
-                        }: Partial<PropTypes>) => {
+  value,
+  mode = 'datetime',
+  locale = 'en',
+  minimumDate = null,
+  maximumDate = null,
+  firstDayOfWeek = 0,
+  onValueChange = () => {},
+  displayFullDays = false,
+  headerButtonsPosition = 'around',
+  headerContainerStyle,
+  headerTextContainerStyle,
+  headerTextStyle,
+  headerButtonStyle,
+  headerButtonColor,
+  headerButtonSize,
+  dayContainerStyle,
+  todayContainerStyle,
+  todayTextStyle,
+  monthContainerStyle,
+  yearContainerStyle,
+  weekDaysContainerStyle,
+  weekDaysTextStyle,
+  calendarTextStyle,
+  selectedTextStyle,
+  selectedItemColor,
+  timePickerContainerStyle,
+  timePickerTextStyle,
+  buttonPrevIcon,
+  buttonNextIcon,
+}: Partial<PropTypes>) => {
   dayjs.locale(locale);
 
   const theme = {
@@ -112,7 +112,14 @@ const DateTimePicker = ({
       }
     },
     {
-      calendarView: mode === 'time' ? CalendarViews.time : mode === 'year' ? CalendarViews.year : mode ==='month' ? CalendarViews.month : CalendarViews.day ,
+      calendarView:
+        mode === 'time'
+          ? CalendarViews.time
+          : mode === 'year'
+          ? CalendarViews.year
+          : mode === 'month'
+          ? CalendarViews.month
+          : CalendarViews.day,
       selectedDate: value ? getFormated(value) : new Date(),
       currentDate: value ? getFormated(value) : new Date(),
       currentYear: value ? getDateYear(value) : new Date().getFullYear(),
@@ -120,7 +127,7 @@ const DateTimePicker = ({
   );
 
   useEffect(() => {
-    if( mode === 'month'){
+    if (mode === 'month') {
       dispatch({
         type: CalendarActionKind.CHANGE_CURRENT_DATE,
         payload: value ? getFormated(value) : new Date(),
@@ -129,13 +136,12 @@ const DateTimePicker = ({
         type: CalendarActionKind.CHANGE_CURRENT_YEAR,
         payload: getDateYear(value),
       });
-    }else if(mode === 'year'){
+    } else if (mode === 'year') {
       dispatch({
         type: CalendarActionKind.CHANGE_CURRENT_DATE,
-        payload:  getDateMonth(value) ,
+        payload: getDateMonth(value),
       });
-    }
-    else{
+    } else {
       dispatch({
         type: CalendarActionKind.CHANGE_SELECTED_DATE,
         payload: value ? getFormated(value) : new Date(),
@@ -149,12 +155,19 @@ const DateTimePicker = ({
         payload: getDateYear(value),
       });
     }
-  }, [value]);
+  }, [mode, value]);
 
   useEffect(() => {
     dispatch({
       type: CalendarActionKind.SET_CALENDAR_VIEW,
-      payload: mode === 'time' ? CalendarViews.time : mode === 'year' ? CalendarViews.year : mode ==='month' ? CalendarViews.month : CalendarViews.day ,
+      payload:
+        mode === 'time'
+          ? CalendarViews.time
+          : mode === 'year'
+          ? CalendarViews.year
+          : mode === 'month'
+          ? CalendarViews.month
+          : CalendarViews.day,
     });
   }, [mode]);
 
@@ -173,9 +186,9 @@ const DateTimePicker = ({
       });
     },
     onSelectMonth: (month: number, currentYear: number | string) => {
-      const date = new Date(currentYear.toString()).setMonth(month)
+      const date = new Date(currentYear.toString()).setMonth(month);
       const newDate = getDate(date).month(month);
-      if(mode === CalendarViews.day){
+      if (mode === CalendarViews.day) {
         dispatch({
           type: CalendarActionKind.CHANGE_CURRENT_DATE,
           payload: getFormated(newDate),
@@ -184,7 +197,8 @@ const DateTimePicker = ({
           type: CalendarActionKind.SET_CALENDAR_VIEW,
           payload: CalendarViews.day,
         });
-      }else {  onValueChange(date);
+      } else {
+        onValueChange(date);
         dispatch({
           type: CalendarActionKind.CHANGE_SELECTED_DATE,
           payload: getFormated(newDate),
@@ -196,9 +210,9 @@ const DateTimePicker = ({
       }
     },
     onSelectYear: (year: number) => {
-      const date = new Date().setYear(year)
+      const date = new Date().setFullYear(year);
       const newDate = getDate(state.currentDate).year(year);
-      if(mode === 'month') {
+      if (mode === 'month') {
         dispatch({
           type: CalendarActionKind.CHANGE_CURRENT_YEAR,
           payload: year,
@@ -215,7 +229,7 @@ const DateTimePicker = ({
           type: CalendarActionKind.SET_CALENDAR_VIEW,
           payload: CalendarViews.month,
         });
-      } else if(mode === CalendarViews.day) {
+      } else if (mode === CalendarViews.day) {
         dispatch({
           type: CalendarActionKind.CHANGE_CURRENT_YEAR,
           payload: year,
