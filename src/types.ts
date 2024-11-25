@@ -5,7 +5,13 @@ import type { ReactNode } from 'react';
 
 export type DateType = string | number | Dayjs | Date | null | undefined;
 
-export type CalendarModes = 'datetime' | 'date' | 'time' | 'month' | 'year' | 'day';
+export type CalendarModes =
+  | 'datetime'
+  | 'date'
+  | 'time'
+  | 'month'
+  | 'year'
+  | 'day';
 
 export type HeaderButtonPositions = 'around' | 'right' | 'left';
 
